@@ -1,4 +1,4 @@
-
+//Application: Sort Employees by Salary using Merge Sort
 class Employee {
     String name;
     int salary;
