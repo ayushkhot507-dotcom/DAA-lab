@@ -1,0 +1,112 @@
+import java.util.Scanner;
+
+// Student class to store student details
+class Student {
+    String name;
+    int marks;
+
+    public Student(String name, int marks) {
+        this.name = name;
+        this.marks = marks;
+    }
+
+    @Override
+    public String toString() {
+        return name + " - " + marks;
+    }
+}
+
+public class MergeSortApplication {
+
+    // Merge Sort algorithm for Student objects
+    public static void mergeSort(Student[] students, int left, int right) {
+        if (left < right) {
+            int mid = (left + right) / 2;
+
+            // Sort the two halves
+            mergeSort(students, left, mid);
+            mergeSort(students, mid + 1, right);
+
+            // Merge the sorted halves
+            merge(students, left, mid, right);
+        }
+    }
+
+    // Merge two sorted subarrays
+    public static void merge(Student[] students, int left, int mid, int right) {
+        int n1 = mid - left + 1;
+        int n2 = right - mid;
+
+        Student[] L = new Student[n1];
+        Student[] R = new Student[n2];
+
+        for (int i = 0; i < n1; i++)
+            L[i] = students[left + i];
+        for (int j = 0; j < n2; j++)
+            R[j] = students[mid + 1 + j];
+
+        int i = 0, j = 0, k = left;
+
+        // Compare and merge
+        while (i < n1 && j < n2) {
+            if (L[i].marks >= R[j].marks) { // descending order
+                students[k] = L[i];
+                i++;
+            } else {
+                students[k] = R[j];
+                j++;
+            }
+            k++;
+        }
+
+        // Copy remaining elements
+        while (i < n1) {
+            students[k] = L[i];
+            i++;
+            k++;
+        }
+        while (j < n2) {
+            students[k] = R[j];
+            j++;
+            k++;
+        }
+    }
+
+    // Display student list
+    public static void printStudents(Student[] students) {
+        for (Student s : students)
+            System.out.println(s);
+    }
+
+    // Main method
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+
+        System.out.print("Enter number of students: ");
+        int n = sc.nextInt();
+        sc.nextLine(); // consume newline
+
+        Student[] students = new Student[n];
+
+        // Input student details
+        for (int i = 0; i < n; i++) {
+            System.out.print("Enter name of student " + (i + 1) + ": ");
+            String name = sc.nextLine();
+            System.out.print("Enter marks of " + name + ": ");
+            int marks = sc.nextInt();
+            sc.nextLine(); // consume newline
+            students[i] = new Student(name, marks);
+        }
+
+        System.out.println("\nBefore Sorting:");
+        printStudents(students);
+
+        // Sort students by marks using merge sort
+        mergeSort(students, 0, n - 1);
+
+        System.out.println("\nAfter Sorting by Marks (Descending):");
+        printStudents(students);
+
+        sc.close();
+    }
+}
